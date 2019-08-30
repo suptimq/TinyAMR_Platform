@@ -1,1 +1,0 @@
-# TinyAMR_Platform
