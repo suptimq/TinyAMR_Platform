@@ -1,0 +1,74 @@
+*****************************************************************
+      SolidWorks Corporation - IGES Processor Status Report
+*****************************************************************
+=================================================================
+General Information
+=================================================================
+Sending System Product I.D.  : 无线-RPLIDAR-1.5 DevKit.SLDASM
+Receiving System Product I.D.: 无线-RPLIDAR-1.5 DevKit.SLDASM
+File Name                    : F:\5-无线充电雷达\无线充电雷达 （W2）\RPLIDAR 1.5_for comsumer\无线-RPLIDAR-1.5 DevKit.IGS
+Sending System               : SolidWorks 2015
+Preprocessor Version         : SolidWorks 2015
+File Creation Date           : 160503.170812
+Model Creation Date          : 160503.170812
+Units                        : MM
+Model Space Scale            : 1
+Author                       : Wangyc
+Organization                 : 
+
+
+=================================================================
+Entity Processing Information
+=================================================================
+
+
+=================================================================
+Precision analysis of IGES file:
+=================================================================
+  Most prevalent number of significant digits:               1
+  Highest number of significant digits:                     10
+  Average number of significant digits:                3.72881
+  Maximum distance to origin:                          992.007
+  Minimum distance to origin:                                0
+  Effective number of significant digits:                   10
+
+
+=================================================================
+Entity Summary
+=================================================================
+-----------------------------------------------------------------
+Type Name                                         Count Converted
+---- ----                                         ----- ---------
+100  Arc                                           6982      6982
+110  Line                                          9332      9332
+112  Parametric spline curve                       4466      4466
+116  Point                                         1110      1110
+120  Surface of revolution                         1636      1636
+123  Direction                                     2220      2220
+124  Transformation matrix                         6741      6741
+128  Rational B-spline surface                      846       846
+186  Manifold Solid B-rep Object                     21        21
+190  Plane surface entity                          1110      1110
+308  Subfigure definition                            22        22
+314  Color definition                                65        65
+408  Singular subfigure instance                     28        28
+502  Vertex list                                     21        21
+504  Edge entity                                     21        21
+508  Loop entity                                   3811      3811
+510  Face entity                                   3592      3592
+514  Shell entity                                    22        22
+_________________________________________________________________
+
+
+=================================================================
+Result Summary
+=================================================================
+SolidWorks Feature Type                Count
+-----------------------                -----
+Solid feature(s)                       21
+Surface feature(s)                     0
+Curve/Sketch feature(s)                0
+--------------------------------------------
+Start time: Saturday, August 31, 2019 15:21:55
+Finish time: Saturday, August 31, 2019 15:22:38
+Processing time: 0 days, 00 hours, 00 mins, 43 secs
