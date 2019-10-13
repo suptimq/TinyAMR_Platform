@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<!-- saved from url=(0062)http://controls.coderedrobotics.com/programminglessons/11.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>
+        
+        Lesson 11: Mecanum Drive - Controls Resources
+        
+      </title>
+
+        
+        
+        <meta name="ROBOTS" content="INDEX, FOLLOW">
+
+        <meta name="author" content="Code Red Robotics">
+        <meta name="description" content="Controls resources for FIRST FRC robotics teams.  ">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="./Lesson 11_ Mecanum Drive - Controls Resources_files/guide.css" type="text/css">
+        <link rel="stylesheet" href="./Lesson 11_ Mecanum Drive - Controls Resources_files/search.css" type="text/css">
+        <link rel="stylesheet" href="./Lesson 11_ Mecanum Drive - Controls Resources_files/syntax.css" type="text/css">
+        <link rel="icon" type="image/x-icon" href="http://controls.coderedrobotics.com/favicon.png">
+    </head>
+    <body>
+        <div id="container">
+            <div id="content">
+              
+              <h1>Lesson 11: Mecanum Drive</h1>
+              
+              <p>Mecanum drive allows movement in any direction.  Thus, it is useful for games
+where maneuverability is required.  Mecanum does eliminate basically all pushing
+ability, so don't expect to win in a pushing match with another robot.</p>
+
+<p>Do how do we program mecanum?  There are different ways to do it.  You may
+find a different way that works just as well as the method I am going to teach
+you.  Before we  start writing any code, lets do a little bit of preplanning.
+First, what joysticks will we need to use?  Since mecanum moves in all
+directions, I recommend having one whole stick (both x and y) controlling the
+direction of the robot, and another axis controlling rotation.  This is a total
+of three axes: x, y, and rot.  But what math do we need to do to calculate what
+wheels should spin and when?  The y-axis is the easiest.  When you push it to 1,
+all the wheels should spin forward, when you push it to -1, they should all
+spin back.  Lets create some variables for each wheel and store this value.
+I will be using the HID object from the Code Red Library to get joystick input
+in this lesson.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">double</span> <span class="n">leftF</span><span class="o">,</span> <span class="n">leftB</span><span class="o">,</span> <span class="n">rightF</span><span class="o">,</span> <span class="n">rightB</span><span class="o">;</span> <span class="c1">// front &amp; back, left &amp; right</span>
+
+<span class="n">leftF</span> <span class="o">=</span> <span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_Y</span><span class="o">);</span>
+<span class="n">rightF</span> <span class="o">=</span> <span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_Y</span><span class="o">);</span>
+<span class="n">leftB</span> <span class="o">=</span> <span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_Y</span><span class="o">);</span>
+<span class="n">rightB</span> <span class="o">=</span> <span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_Y</span><span class="o">);</span></code></pre></figure>
+
+<p>If you test this code, you can see that pushing the left stick forward will
+make the robot move forward, and pushing it backward will make the robot move
+backward. Don't forget that you may need to add negatives, as we have learned
+before, to account for certain motors being mounted in the reverse orientation.
+(If you are using <code>PWMController</code> then just set backwards to
+<code>true</code> in the constructor.)</p>
+
+<p>OK, let's do side-to-side movement.  In order to move sideways, the wheels
+need to spin against each other.  See the diagram below to see what way the
+wheels need to spin for each direction.  We can simply add values from the
+x-axis on the gamepad to the variables we already have.  This can result in a
+motor speed greater than 1, but we will account for that later.</p>
+
+<img src="./Lesson 11_ Mecanum Drive - Controls Resources_files/mecanum_diagram.png">
+
+<p>We can use negatives to make the wheels spin against each other.  Here is the
+code you should add to do side-to-side movement:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">leftF</span> <span class="o">+=</span> <span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_X</span><span class="o">);</span>
+<span class="n">rightF</span> <span class="o">+=</span> <span class="o">-</span><span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_X</span><span class="o">);</span>
+<span class="n">leftB</span> <span class="o">+=</span> <span class="o">-</span><span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_X</span><span class="o">);</span>
+<span class="n">rightB</span> <span class="o">+=</span> <span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_X</span><span class="o">);</span></code></pre></figure>
+
+<p>Again, you may need to add/remove negatives.  Let's talk about rotation.  When the robot
+is rotating to the right, the right wheels move backwards and the left move forward.
+We can add this code to account for that:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">leftF</span> <span class="o">+=</span> <span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_RIGHT_X</span><span class="o">);</span>
+<span class="n">rightF</span> <span class="o">+=</span> <span class="o">-</span><span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_RIGHT_X</span><span class="o">);</span>
+<span class="n">leftB</span> <span class="o">+=</span> <span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_RIGHT_X</span><span class="o">);</span>
+<span class="n">rightB</span> <span class="o">+=</span> <span class="o">-</span><span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_RIGHT_X</span><span class="o">);</span></code></pre></figure>
+
+<p>I mentioned this earlier, but hopefully you have been paying attention enough
+to realize: "This shouldn't work, some of the values could be more than 1".
+You're right.  There is a way to make it work though.  We find the maximum value
+out of these four numbers, and if it is bigger than 1, divide each value by that max.
+This will scale each motor output down to an appropriate value.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">double</span> <span class="n">max</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">leftF</span><span class="o">),</span> <span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">rightF</span><span class="o">)),</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">leftB</span><span class="o">),</span> <span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">rightB</span><span class="o">)));</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="n">max</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">leftF</span> <span class="o">=</span> <span class="n">leftF</span> <span class="o">/</span> <span class="n">max</span><span class="o">;</span>
+    <span class="n">rightF</span> <span class="o">=</span> <span class="n">rightF</span> <span class="o">/</span> <span class="n">max</span><span class="o">;</span>
+    <span class="n">leftB</span> <span class="o">=</span> <span class="n">leftB</span> <span class="o">/</span> <span class="n">max</span><span class="o">;</span>
+    <span class="n">rightB</span> <span class="o">=</span> <span class="n">rightB</span> <span class="o">/</span> <span class="n">max</span><span class="o">;</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>All that is left to do is to give these values to the motors:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">motorFL</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">leftF</span><span class="o">);</span>
+<span class="n">motorFR</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">rightF</span><span class="o">);</span>
+<span class="n">motorBL</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">leftB</span><span class="o">);</span>
+<span class="n">motorBR</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">rightB</span><span class="o">);</span></code></pre></figure>
+
+<p>I really hope you understand why this works... but you probably don't. It's
+difficult to explain, but let me try summing it up.  You have three inputs.
+Each of these inputs acts on each of the four wheels. You add up the total of
+all the inputs for each wheel.  There is a high chance that these totals are
+going to be more than 1, so we scale all the values down to numbers that are
+appropriate for the motor controllers.  The negatives that I have in my code are
+there because side-to-side movement and rotation require some wheels to spin
+different directions to get the desired motion.</p>
+
+<p>Here is the completed code:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">double</span> <span class="n">leftF</span><span class="o">,</span> <span class="n">leftB</span><span class="o">,</span> <span class="n">rightF</span><span class="o">,</span> <span class="n">rightB</span><span class="o">;</span> <span class="c1">// front &amp; back, left &amp; right</span>
+
+<span class="n">leftF</span> <span class="o">=</span> <span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_Y</span><span class="o">);</span>
+<span class="n">rightF</span> <span class="o">=</span> <span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_Y</span><span class="o">);</span>
+<span class="n">leftB</span> <span class="o">=</span> <span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_Y</span><span class="o">);</span>
+<span class="n">rightB</span> <span class="o">=</span> <span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_Y</span><span class="o">);</span>
+
+<span class="n">leftF</span> <span class="o">+=</span> <span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_X</span><span class="o">);</span>
+<span class="n">rightF</span> <span class="o">+=</span> <span class="o">-</span><span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_X</span><span class="o">);</span>
+<span class="n">leftB</span> <span class="o">+=</span> <span class="o">-</span><span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_X</span><span class="o">);</span>
+<span class="n">rightB</span> <span class="o">+=</span> <span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_X</span><span class="o">);</span>
+
+<span class="n">leftF</span> <span class="o">+=</span> <span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_RIGHT_X</span><span class="o">);</span>
+<span class="n">rightF</span> <span class="o">+=</span> <span class="o">-</span><span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_RIGHT_X</span><span class="o">);</span>
+<span class="n">leftB</span> <span class="o">+=</span> <span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_RIGHT_X</span><span class="o">);</span>
+<span class="n">rightB</span> <span class="o">+=</span> <span class="o">-</span><span class="n">gamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_RIGHT_X</span><span class="o">);</span>
+
+
+<span class="kt">double</span> <span class="n">max</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">leftF</span><span class="o">),</span> <span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">rightF</span><span class="o">)),</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">leftB</span><span class="o">),</span> <span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">rightB</span><span class="o">)));</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="n">max</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">leftF</span> <span class="o">=</span> <span class="n">leftF</span> <span class="o">/</span> <span class="n">max</span><span class="o">;</span>
+    <span class="n">rightF</span> <span class="o">=</span> <span class="n">rightF</span> <span class="o">/</span> <span class="n">max</span><span class="o">;</span>
+    <span class="n">leftB</span> <span class="o">=</span> <span class="n">leftB</span> <span class="o">/</span> <span class="n">max</span><span class="o">;</span>
+    <span class="n">rightB</span> <span class="o">=</span> <span class="n">rightB</span> <span class="o">/</span> <span class="n">max</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="n">motorFL</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">leftF</span><span class="o">);</span>
+<span class="n">motorFR</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">rightF</span><span class="o">);</span>
+<span class="n">motorBL</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">leftB</span><span class="o">);</span>
+<span class="n">motorBR</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">rightB</span><span class="o">);</span></code></pre></figure>
+
+<h2>Exercises</h2>
+<ol>
+<li>Recreate the mecanum drive code from memory.  Refer back to this lesson as
+necessary.</li>
+<li>Apply the knowledge you learned in <a href="http://controls.coderedrobotics.com/programminglessons/10.html">lesson 10</a> to a
+mecanum drive.  Try out both solution 1 and solution 2.</li>
+</ol>
+
+<hr>
+<h2>Using Code Red's library</h2>
+<p>Fortunately it's easy to implement a mecanum drive using the Code Red Robot
+Library. It's important to understand why the library works, however.  Do not
+simply skip over the above section and only learn this way.  The Robot Library
+allows you to not reinvent the wheel.  Since you know how to write mecanum drive
+now, you could do it for 10 different robots and it would be the exact same for
+each one.  That's why we added it into the library.</p>
+
+<p>There is a class called <code>Drive</code> in the library. The goal of the
+drive object is to control the entire drive train. The library has two different
+types of drive trains, each with their own class that extend the base
+<code>Drive</code> class.  These two drive trains are tank and mecanum.  Let's
+implement mecanum.  Lets also use some PWMControllers for our motors, and let's
+say that the left two motors are mounted on to the robot upside-down. Here is
+the entire main robot class required to get the robot moving with mecanum
+drive:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Robot</span> <span class="kd">extends</span> <span class="n">IterativeRobot</span> <span class="o">{</span>
+
+    <span class="n">PWMController</span> <span class="n">leftF</span><span class="o">,</span> <span class="n">leftB</span><span class="o">,</span> <span class="n">rightF</span><span class="o">,</span> <span class="n">rightB</span><span class="o">;</span>
+    <span class="n">HID</span> <span class="n">driveGamepad</span><span class="o">;</span>
+    <span class="n">Drive</span> <span class="n">drive</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">robotInit</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">driveGamepad</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HID</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="n">leftF</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PWMController</span><span class="o">(</span><span class="n">Wiring</span><span class="o">.</span><span class="na">FRONT_LEFT_MOTOR</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span> <span class="c1">// this motor is mounted in reverse</span>
+        <span class="n">leftB</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PWMController</span><span class="o">(</span><span class="n">Wiring</span><span class="o">.</span><span class="na">REAR_LEFT_MOTOR</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span> <span class="c1">// so is this one</span>
+        <span class="n">rightF</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PWMController</span><span class="o">(</span><span class="n">Wiring</span><span class="o">.</span><span class="na">FRONT_RIGHT_MOTOR</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+        <span class="n">rightB</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PWMController</span><span class="o">(</span><span class="n">Wiring</span><span class="o">.</span><span class="na">REAR_RIGHT_MOTOR</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+
+        <span class="n">drive</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MecanumDrive</span><span class="o">(</span><span class="n">leftF</span><span class="o">,</span> <span class="n">rightF</span><span class="o">,</span> <span class="n">leftB</span><span class="o">,</span> <span class="n">rightB</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">teleopPeriodic</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">drive</span><span class="o">.</span><span class="na">setXYRot</span><span class="o">(</span><span class="n">driveGamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_X</span><span class="o">),</span> <span class="n">driveGamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_LEFT_Y</span><span class="o">),</span>
+                <span class="n">driveGamepad</span><span class="o">.</span><span class="na">axis</span><span class="o">(</span><span class="n">LogitechF310</span><span class="o">.</span><span class="na">STICK_RIGHT_X</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<p class="important">Ideally you would use a KeyMap object to keep track of your
+gamepad, but I did not include that in this lesson for simplicity sake.</p>
+
+<p>Here are a few other things worth mentioning about the robot library's drive
+objects that don't really fit into this lesson but aren't long enough to create
+their own lesson from: </p>
+
+<ul>
+  <li>You could also do the same thing with a tank drive.  Replace the
+  <code>MecanumDrive</code> class with the <code>TankDrive</code> class.</li>
+  <li>You can also implement a field oriented drive system using the robot
+  library. instantiate a <code>FieldOrientedDrive</code> object, and give it a
+  drive object to control.  (Probably mecanum).</li>
+</ul>
+
+              
+                <div class="lessonnav">
+                  
+                    <a href="http://controls.coderedrobotics.com/programminglessons/10.html" style="float: left">&lt;--- Previous Lesson</a>
+                  
+                  
+                    <a href="http://controls.coderedrobotics.com/programminglessons/12.html" style="float: right">Next Lesson---&gt;</a>
+                  
+                </div>
+              
+              <div id="footer" class="footer">
+  <footer>
+    <hr><br><img src="./Lesson 11_ Mecanum Drive - Controls Resources_files/first_logo.png" alt="First Logo">
+    <br>Site designed and written by Code Red Robotics.
+    <br><a href="http://coderedrobotics.com/">Website</a>
+    <a href="http://www.github.com/CodeRed2771/">Our GitHub</a>
+    <a href="mailto:coderedcontrols@gmail.com">Contact</a>
+  </footer>
+</div>
+
+            </div>
+            <div id="navbar" class="navbar">
+              <div id="navbar_header">
+                <a id="back" href="http://coderedrobotics.com/">http://coderedrobotics.com</a>
+                <center>
+                    <a href="http://controls.coderedrobotics.com/"><img src="./Lesson 11_ Mecanum Drive - Controls Resources_files/mainlogo.png" alt="Code Red Logo"></a>
+                    <h3>The Complete Guide to the</h3>
+                    <h1>FRC Controls System</h1>
+                    <p></p>
+                </center>
+              </div>
+              <div id="tfheader">
+                <form id="tfnewsearch" method="get" action="http://controls.coderedrobotics.com/search.html">
+                  <input type="text" class="tftextinput" name="query" placeholder="Search..."><span class="arrow"><input type="submit" value="search" class="tfbutton"></span>
+                </form>
+                <div class="tfclear"></div>
+              </div>
+            <nav>
+              <ul>
+                <a href="http://controls.coderedrobotics.com/"><li>Home</li></a>
+                <a href="http://controls.coderedrobotics.com/programminglessons"><li>Programming Lessons</li></a>
+                <a href="http://controls.coderedrobotics.com/library"><li>Custom Library</li></a>
+                <a href="http://controls.coderedrobotics.com/robots"><li>Robot Code</li></a>
+              </ul>
+            </nav>
+          </div>
+        </div>
+    
+
+</body></html>

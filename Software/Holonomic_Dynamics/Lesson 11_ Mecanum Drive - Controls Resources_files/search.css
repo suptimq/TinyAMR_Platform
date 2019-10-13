@@ -1,0 +1,134 @@
+
+#tfheader{
+}
+
+#tfnewsearch{
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.tftextinput{
+  background: #2E2E2E;
+  padding: 10px 15px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size:14px;
+  width: calc(100% - 105px);
+  color: #FFF;
+  left: 0px;
+  border: 0px;
+  -webkit-transition: background 0.1s linear;
+       -moz-transition: background 0.1s linear;
+        -ms-transition: background 0.1s linear;
+         -o-transition: background 0.1s linear;
+            transition: background 0.1s linear;
+}
+
+.tftextinput:hover {
+  background: #3E3E3E;
+
+}
+
+.tftextinput:focus {
+  background: #4A4A4A;
+  -webkit-transition: background 0.1s linear;
+       -moz-transition: background 0.1s linear;
+        -ms-transition: background 0.1s linear;
+         -o-transition: background 0.1s linear;
+            transition: background 0.1s linear;
+}
+
+.tfbutton {
+  margin: 0;
+  padding: 10px 15px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size:14px;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  color: #ffffff;
+  border: 0px;
+  width: 75px;
+  background: #880000;
+}
+
+.tfbutton:hover {
+  text-decoration: none;
+  background: #FF0000;
+}
+
+/* Fixes submit button height problem in Firefox */
+.tfbutton::-moz-focus-inner {
+  border: 0;
+}
+
+.tfclear{
+  clear:both;
+}
+
+ul.results {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 900px;
+  list-style: none;
+  display: inline-block;
+}
+
+ul.results > li {
+  margin: 10px 0;
+}
+
+ul.results > li:first-child {
+  margin-top: 0;
+}
+
+h2.results {
+  padding-bottom: 20px;
+}
+
+li.result a {
+  text-decoration: none;
+}
+li.result a:hover {
+}
+
+li.result p {
+  text-align: left;
+}
+
+li.result div {
+  background: #555555;
+  padding: 15px;
+  color:#000000;
+  -webkit-transition:color 0.3s;
+  -moz-transition:color 0.3s;
+  -o-transition:color 0.3s;
+  transition:color 0.3s
+}
+
+li.result h3 {
+  font-size: 30px;
+  font-weight: 700;
+  text-align: left;
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: underline;
+  -webkit-transition:color 0.3s;
+  -moz-transition:color 0.3s;
+  -o-transition:color 0.3s;
+  transition:color 0.3s
+}
+
+li.result h3:hover {
+  color: #ff6100;
+  -webkit-transition:color 0.3s;
+  -moz-transition:color 0.3s;
+  -o-transition:color 0.3s;
+  transition:color 0.3s
+}
+
+.result p {
+  margin: 0;
+  color: #fff;
+}
