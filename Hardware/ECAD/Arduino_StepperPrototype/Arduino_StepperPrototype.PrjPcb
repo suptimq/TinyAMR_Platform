@@ -123,19 +123,31 @@ GenerateClassCluster=0
 DocumentUniqueId=
 
 [GeneratedDocument1]
-DocumentPath=Project Outputs for Free Documents\Gerber\Arduino_StepperPrototype.EXTREP
+DocumentPath=Project Outputs for Arduino_StepperPrototype\NC Drill\Arduino_StepperPrototype.DRR
 DItemRevisionGUID=
 
 [GeneratedDocument2]
-DocumentPath=Project Outputs for Free Documents\Gerber\Arduino_StepperPrototype.GTL
+DocumentPath=Project Outputs for Arduino_StepperPrototype\Gerber\Arduino_StepperPrototype.EXTREP
 DItemRevisionGUID=
 
 [GeneratedDocument3]
-DocumentPath=Project Outputs for Free Documents\Gerber\Arduino_StepperPrototype.REP
+DocumentPath=Project Outputs for Arduino_StepperPrototype\Gerber\Arduino_StepperPrototype.GTL
 DItemRevisionGUID=
 
 [GeneratedDocument4]
-DocumentPath=Project Outputs for Free Documents\Gerber\Arduino_StepperPrototype.RUL
+DocumentPath=Project Outputs for Arduino_StepperPrototype\NC Drill\Arduino_StepperPrototype.LDP
+DItemRevisionGUID=
+
+[GeneratedDocument5]
+DocumentPath=Project Outputs for Arduino_StepperPrototype\Gerber\Arduino_StepperPrototype.REP
+DItemRevisionGUID=
+
+[GeneratedDocument6]
+DocumentPath=Project Outputs for Arduino_StepperPrototype\Gerber\Arduino_StepperPrototype.RUL
+DItemRevisionGUID=
+
+[GeneratedDocument7]
+DocumentPath=Project Outputs for Arduino_StepperPrototype\NC Drill\Arduino_StepperPrototype.TXT
 DItemRevisionGUID=
 
 [Configuration1]
@@ -146,6 +158,9 @@ ReleaseItemId=
 Variant=[No Variations]
 OutputJobsCount=0
 ContentTypeGUID=CB6F2064-E317-11DF-B822-12313F0024A2
+
+[Generic_EDE]
+OutputDir=
 
 [OutputGroup1]
 Name=Netlist Outputs
