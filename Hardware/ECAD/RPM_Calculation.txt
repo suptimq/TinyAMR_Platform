@@ -1,0 +1,2 @@
+800hz = 1 rps = rpm = 60
+TMC2130 Standalone Mode
