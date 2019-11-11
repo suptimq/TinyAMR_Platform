@@ -1,9 +1,11 @@
+from inputs import devices
 from evdev import InputDevice, categorize, ecodes, KeyEvent
 import time
 import threading
 
 
-gamepad = InputDevice('/dev/input/event7')
+events = devices.gamepads[0].get_char_device_path()
+gamepad = InputDevice(events)
 
 """
 press the directional pad  ---- ABS event
